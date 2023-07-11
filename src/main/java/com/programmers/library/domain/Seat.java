@@ -1,44 +1,28 @@
 package com.programmers.library.domain;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Seat {
-    private final UUID seatId;
     private final LocalDateTime createdAt;
 
-    private String seatNumber;
+    private Long seatId;
     private Category category;
     private SeatStatus seatStatus;
     private LocalDateTime updatedAt;
 
-    public Seat(UUID seatId, Category category, SeatStatus seatStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.seatId = seatId;
+    public Seat(LocalDateTime createdAt, Category category, SeatStatus seatStatus, LocalDateTime updatedAt) {
         this.createdAt = createdAt;
         this.category = category;
         this.seatStatus = seatStatus;
         this.updatedAt = updatedAt;
     }
 
-    public Seat(UUID seatId, String seatNumber, Category category, SeatStatus seatStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.seatId = seatId;
-        this.createdAt = createdAt;
-        this.seatNumber = seatNumber;
-        this.category = category;
-        this.seatStatus = seatStatus;
-        this.updatedAt = updatedAt;
-    }
-
-    public UUID getSeatId() {
+    public Long getSeatId() {
         return seatId;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public String getSeatNumber() {
-        return seatNumber;
     }
 
     public Category getCategory() {
@@ -61,5 +45,9 @@ public class Seat {
     public void changeSeatStatus(SeatStatus seatStatus) {
         this.seatStatus = seatStatus;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void setSeatId(Long seatId) {
+        this.seatId = seatId;
     }
 }
