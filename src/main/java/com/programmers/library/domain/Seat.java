@@ -1,6 +1,7 @@
 package com.programmers.library.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Seat {
     private final LocalDateTime createdAt;
@@ -15,6 +16,21 @@ public class Seat {
         this.category = category;
         this.seatStatus = seatStatus;
         this.updatedAt = updatedAt;
+    }
+
+    public Seat(LocalDateTime createdAt, Long seatId, Category category, SeatStatus seatStatus, LocalDateTime updatedAt) {
+        validateSeatId(seatId);
+        this.createdAt = createdAt;
+        this.seatId = seatId;
+        this.category = category;
+        this.seatStatus = seatStatus;
+        this.updatedAt = updatedAt;
+    }
+
+    private static void validateSeatId(Long seatId) {
+        if (Objects.isNull(seatId)) {
+            throw new IllegalArgumentException("좌석 아이디가 비어있습니다.");
+        }
     }
 
     public Long getSeatId() {

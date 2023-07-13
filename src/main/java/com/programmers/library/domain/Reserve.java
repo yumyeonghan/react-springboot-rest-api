@@ -1,6 +1,7 @@
 package com.programmers.library.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Reserve {
@@ -14,6 +15,8 @@ public class Reserve {
     private LocalDateTime updatedAt;
 
     public Reserve(UUID reserveId, StudentId studentId, String studentName, Seat seat, ReserveStatus reserveStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        validateReserveId(reserveId);
+        validateStudentName(studentName);
         this.reserveId = reserveId;
         this.studentId = studentId;
         this.studentName = studentName;
@@ -21,6 +24,18 @@ public class Reserve {
         this.reserveStatus = reserveStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    private static void validateReserveId(UUID reserveId) {
+        if (Objects.isNull(reserveId)) {
+            throw new IllegalArgumentException("예약 아이디가 비어있습니다.");
+        }
+    }
+
+    private static void validateStudentName(String studentName) {
+        if (Objects.isNull(studentName) || studentName.isBlank()) {
+            throw new IllegalArgumentException("학생 이름이 비어있습니다.");
+        }
     }
 
     public UUID getReserveId() {
