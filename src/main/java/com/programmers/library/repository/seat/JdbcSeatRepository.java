@@ -3,9 +3,15 @@ package com.programmers.library.repository.seat;
 import com.programmers.library.domain.Category;
 import com.programmers.library.domain.Seat;
 import com.programmers.library.domain.SeatStatus;
+import com.programmers.library.repository.sql.builder.DeleteSqlBuilder;
+import com.programmers.library.repository.sql.builder.InsertSqlBuilder;
 import com.programmers.library.repository.sql.builder.SelectSqlBuilder;
+import com.programmers.library.repository.sql.builder.UpdateSqlBuilder;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,27 +38,74 @@ public class JdbcSeatRepository implements SeatRepository{
 
     @Override
     public Seat insert(Seat seat) {
-        return null;
+        String sql = new InsertSqlBuilder()
+                .insertInto("seat")
+                .columns("seat_id, category, seat_status, created_at, updated_at")
+                .values(":seatId, :category, :seatStatus, :createdAt, :updatedAt")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("seatId", seat.getSeatId())
+                .addValue("category", seat.getCategory())
+                .addValue("seatStatus", seat.getSeatStatus().name())
+                .addValue("createdAt", seat.getCreatedAt())
+                .addValue("updatedAt", seat.getUpdatedAt());
+        namedParameterJdbcTemplate.update(sql, paramMap);
+        return seat;
     }
 
     @Override
     public Seat update(Seat seat) {
-        return null;
+        String sql = new UpdateSqlBuilder()
+                .update("seat")
+                .set("category = :category, seat_status = :seatStatus, update_at = :updatedAt")
+                .where("seat_id = :seatId")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("category", seat.getCategory())
+                .addValue("seatStatus", seat.getSeatStatus().name())
+                .addValue("updatedAt", seat.getUpdatedAt());
+        namedParameterJdbcTemplate.update(sql, paramMap);
+        return seat;
     }
 
     @Override
-    public Optional<Seat> findById(Long id) {
-        return Optional.empty();
+    public Optional<Seat> findById(Long seatId) {
+        String sql = new SelectSqlBuilder()
+                .select("*")
+                .from("seat")
+                .where("seat_id = :seatId")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("seatId", seatId);
+        try {
+            Seat seat = namedParameterJdbcTemplate.queryForObject(sql, paramMap, getSeatRowMapper());
+            return Optional.of(seat);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void deleteById(Long seatId) {
+        String sql = new DeleteSqlBuilder()
+                .deleteFrom("seat")
+                .where("seat_id = :seatId")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("seatId", seatId);
+        namedParameterJdbcTemplate.update(sql, paramMap);
     }
 
     @Override
     public List<Seat> findAllByCategory(Category category) {
-        return null;
+        String sql = new SelectSqlBuilder()
+                .select("*")
+                .from("seat")
+                .where("category = :category")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("category", category);
+        return namedParameterJdbcTemplate.query(sql, paramMap, getSeatRowMapper());
     }
 
     private RowMapper<Seat> getSeatRowMapper() {
