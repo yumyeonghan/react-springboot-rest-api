@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class JdbcSeatRepository implements SeatRepository{
+public class JdbcSeatRepository implements SeatRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -31,7 +31,7 @@ public class JdbcSeatRepository implements SeatRepository{
     public List<Seat> findAll() {
         String sql = new SelectSqlBuilder()
                 .select("*")
-                .from("seat")
+                .from("seats")
                 .build();
         return namedParameterJdbcTemplate.query(sql, getSeatRowMapper());
     }
@@ -39,7 +39,7 @@ public class JdbcSeatRepository implements SeatRepository{
     @Override
     public Seat insert(Seat seat) {
         String sql = new InsertSqlBuilder()
-                .insertInto("seat")
+                .insertInto("seats")
                 .columns("seat_id, category, seat_status, created_at, updated_at")
                 .values(":seatId, :category, :seatStatus, :createdAt, :updatedAt")
                 .build();
@@ -56,7 +56,7 @@ public class JdbcSeatRepository implements SeatRepository{
     @Override
     public Seat update(Seat seat) {
         String sql = new UpdateSqlBuilder()
-                .update("seat")
+                .update("seats")
                 .set("category = :category, seat_status = :seatStatus, update_at = :updatedAt")
                 .where("seat_id = :seatId")
                 .build();
@@ -72,7 +72,7 @@ public class JdbcSeatRepository implements SeatRepository{
     public Optional<Seat> findById(Long seatId) {
         String sql = new SelectSqlBuilder()
                 .select("*")
-                .from("seat")
+                .from("seats")
                 .where("seat_id = :seatId")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
@@ -88,7 +88,7 @@ public class JdbcSeatRepository implements SeatRepository{
     @Override
     public void deleteById(Long seatId) {
         String sql = new DeleteSqlBuilder()
-                .deleteFrom("seat")
+                .deleteFrom("seats")
                 .where("seat_id = :seatId")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
@@ -100,7 +100,7 @@ public class JdbcSeatRepository implements SeatRepository{
     public List<Seat> findAllByCategory(Category category) {
         String sql = new SelectSqlBuilder()
                 .select("*")
-                .from("seat")
+                .from("seats")
                 .where("category = :category")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
@@ -112,9 +112,9 @@ public class JdbcSeatRepository implements SeatRepository{
         return (rs, rowNum) -> {
             Long seatId = rs.getLong("seat_id");
             SeatStatus seatStatus = SeatStatus.valueOf(rs.getString("seat_status").toUpperCase());
-            Category category = Category.valueOf(rs.getString("category").toUpperCase());
+            Category category = Category.valueOf(rs.getString("category"));
             LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
-            LocalDateTime updatedAt = rs.getTimestamp("last_login_at").toLocalDateTime();
+            LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
             return new Seat(createdAt, seatId, category, seatStatus, updatedAt);
         };
     }

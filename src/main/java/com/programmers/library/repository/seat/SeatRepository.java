@@ -13,9 +13,9 @@ public interface SeatRepository {
 
     Seat update(Seat seat);
 
-    Optional<Seat> findById(Long id);
+    Optional<Seat> findById(Long seatId);
 
-    void deleteById(Long id);
+    void deleteById(Long seatId);
 
     List<Seat> findAllByCategory(Category category);
 }
