@@ -40,12 +40,11 @@ public class JdbcSeatRepository implements SeatRepository {
     public Seat insert(Seat seat) {
         String sql = new InsertSqlBuilder()
                 .insertInto("seats")
-                .columns("seat_id, category, seat_status, created_at, updated_at")
-                .values(":seatId, :category, :seatStatus, :createdAt, :updatedAt")
+                .columns("category, seat_status, created_at, updated_at")
+                .values(":category, :seatStatus, :createdAt, :updatedAt")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
-                .addValue("seatId", seat.getSeatId())
-                .addValue("category", seat.getCategory())
+                .addValue("category", seat.getCategory().name())
                 .addValue("seatStatus", seat.getSeatStatus().name())
                 .addValue("createdAt", seat.getCreatedAt())
                 .addValue("updatedAt", seat.getUpdatedAt());
@@ -57,11 +56,12 @@ public class JdbcSeatRepository implements SeatRepository {
     public Seat update(Seat seat) {
         String sql = new UpdateSqlBuilder()
                 .update("seats")
-                .set("category = :category, seat_status = :seatStatus, update_at = :updatedAt")
+                .set("category = :category, seat_status = :seatStatus, updated_at = :updatedAt")
                 .where("seat_id = :seatId")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
-                .addValue("category", seat.getCategory())
+                .addValue("seatId", seat.getSeatId())
+                .addValue("category", seat.getCategory().name())
                 .addValue("seatStatus", seat.getSeatStatus().name())
                 .addValue("updatedAt", seat.getUpdatedAt());
         namedParameterJdbcTemplate.update(sql, paramMap);
@@ -104,7 +104,7 @@ public class JdbcSeatRepository implements SeatRepository {
                 .where("category = :category")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
-                .addValue("category", category);
+                .addValue("category", category.name());
         return namedParameterJdbcTemplate.query(sql, paramMap, getSeatRowMapper());
     }
 
