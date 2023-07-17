@@ -8,21 +8,23 @@ import com.programmers.library.dto.seat.request.SeatUpdateRequestDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 @AllArgsConstructor
 public class SeatServiceImpl implements SeatService{
 
     private final JdbcSeatRepository jdbcSeatRepository;
 
     @Override
-    public Long createSeat(SeatCreateRequestDto seatCreateRequestDto) {
+    public SeatResponseDto createSeat(SeatCreateRequestDto seatCreateRequestDto) {
         Category category = Category.find(seatCreateRequestDto.category());
         Seat seat = new Seat(LocalDateTime.now(), category, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
         jdbcSeatRepository.insert(seat);
-        return seat.getSeatId();
+        return SeatResponseDto.from(seat);
     }
 
     @Override
@@ -31,23 +33,23 @@ public class SeatServiceImpl implements SeatService{
     }
 
     @Override
-    public Long updateSeatStatus(Long seatId) {
+    public SeatResponseDto updateSeatStatus(Long seatId) {
         Seat seat = jdbcSeatRepository.findById(seatId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
         seat.changeSeatStatus();
         jdbcSeatRepository.update(seat);
-        return seat.getSeatId();
+        return SeatResponseDto.from(seat);
     }
 
     @Override
-    public Long updateSeatCategory(SeatUpdateRequestDto seatUpdateRequestDto) {
+    public SeatResponseDto updateSeatCategory(SeatUpdateRequestDto seatUpdateRequestDto) {
         Long seatId = seatUpdateRequestDto.seatId();
         Category category = Category.find(seatUpdateRequestDto.category());
         Seat seat = jdbcSeatRepository.findById(seatId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
         seat.changeCategory(category);
         jdbcSeatRepository.update(seat);
-        return seat.getSeatId();
+        return SeatResponseDto.from(seat);
     }
 
     @Override
@@ -59,7 +61,15 @@ public class SeatServiceImpl implements SeatService{
     }
 
     @Override
-    public SeatResponseDto findSeatBySeatId(Long seatId) {
+    public List<SeatResponseDto> findSeatListByCategory(String category) {
+        return jdbcSeatRepository.findAllByCategory(Category.find(category))
+                .stream()
+                .map(SeatResponseDto::from)
+                .toList();
+    }
+
+    @Override
+    public SeatResponseDto findSeat(Long seatId) {
         return jdbcSeatRepository.findById(seatId)
                 .map(SeatResponseDto::from)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));

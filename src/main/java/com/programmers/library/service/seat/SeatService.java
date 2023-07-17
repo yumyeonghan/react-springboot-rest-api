@@ -7,15 +7,17 @@ import com.programmers.library.dto.seat.response.SeatResponseDto;
 import java.util.List;
 
 public interface SeatService {
-    Long createSeat(SeatCreateRequestDto seatCreateRequestDto);
+    SeatResponseDto createSeat(SeatCreateRequestDto seatCreateRequestDto);
 
     void deleteSeat(Long seatId);
 
-    Long updateSeatStatus(Long seatId);
+    SeatResponseDto updateSeatStatus(Long seatId);
 
-    Long updateSeatCategory(SeatUpdateRequestDto seatUpdateRequestDto);
+    SeatResponseDto updateSeatCategory(SeatUpdateRequestDto seatUpdateRequestDto);
 
     List<SeatResponseDto> findSeatList();
 
-    SeatResponseDto findSeatBySeatId(Long seatId);
+    List<SeatResponseDto> findSeatListByCategory(String category);
+
+    SeatResponseDto findSeat(Long seatId);
 }
