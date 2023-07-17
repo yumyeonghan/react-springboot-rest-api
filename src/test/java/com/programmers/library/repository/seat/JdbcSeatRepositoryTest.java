@@ -1,8 +1,8 @@
 package com.programmers.library.repository.seat;
 
-import com.programmers.library.domain.Category;
-import com.programmers.library.domain.Seat;
-import com.programmers.library.domain.SeatStatus;
+import com.programmers.library.domain.seat.Category;
+import com.programmers.library.domain.seat.Seat;
+import com.programmers.library.domain.seat.SeatStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,9 +1,9 @@
 package com.programmers.library.repository.reserve;
 
-import com.programmers.library.domain.Reserve;
-import com.programmers.library.domain.ReserveStatus;
-import com.programmers.library.domain.Seat;
-import com.programmers.library.domain.StudentId;
+import com.programmers.library.domain.reserve.Reserve;
+import com.programmers.library.domain.reserve.ReserveStatus;
+import com.programmers.library.domain.seat.Seat;
+import com.programmers.library.domain.reserve.StudentId;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import com.programmers.library.repository.sql.builder.DeleteSqlBuilder;
 import com.programmers.library.repository.sql.builder.InsertSqlBuilder;

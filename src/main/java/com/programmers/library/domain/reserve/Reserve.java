@@ -1,4 +1,6 @@
-package com.programmers.library.domain;
+package com.programmers.library.domain.reserve;
+
+import com.programmers.library.domain.seat.Seat;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

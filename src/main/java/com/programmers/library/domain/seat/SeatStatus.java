@@ -1,4 +1,4 @@
-package com.programmers.library.domain;
+package com.programmers.library.domain.seat;
 
 public enum SeatStatus {
     RESERVATION_POSSIBLE,

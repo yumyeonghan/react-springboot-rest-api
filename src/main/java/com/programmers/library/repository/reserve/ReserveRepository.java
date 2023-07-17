@@ -1,6 +1,6 @@
 package com.programmers.library.repository.reserve;
 
-import com.programmers.library.domain.Reserve;
+import com.programmers.library.domain.reserve.Reserve;
 
 import java.util.List;
 import java.util.Optional;

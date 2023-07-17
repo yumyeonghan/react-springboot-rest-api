@@ -1,4 +1,4 @@
-package com.programmers.library.domain;
+package com.programmers.library.domain.reserve;
 
 import com.programmers.library.util.Patterns;
 

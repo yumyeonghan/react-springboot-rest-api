@@ -1,7 +1,7 @@
 package com.programmers.library.repository.seat;
 
-import com.programmers.library.domain.Category;
-import com.programmers.library.domain.Seat;
+import com.programmers.library.domain.seat.Category;
+import com.programmers.library.domain.seat.Seat;
 
 import java.util.List;
 import java.util.Optional;

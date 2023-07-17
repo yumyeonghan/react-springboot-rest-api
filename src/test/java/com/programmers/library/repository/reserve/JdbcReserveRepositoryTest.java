@@ -1,6 +1,11 @@
 package com.programmers.library.repository.reserve;
 
-import com.programmers.library.domain.*;
+import com.programmers.library.domain.reserve.Reserve;
+import com.programmers.library.domain.reserve.ReserveStatus;
+import com.programmers.library.domain.reserve.StudentId;
+import com.programmers.library.domain.seat.Category;
+import com.programmers.library.domain.seat.Seat;
+import com.programmers.library.domain.seat.SeatStatus;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
