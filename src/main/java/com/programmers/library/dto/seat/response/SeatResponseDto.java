@@ -1,4 +1,4 @@
-package com.programmers.library.dto.seat;
+package com.programmers.library.dto.seat.response;
 
 import com.programmers.library.domain.seat.Seat;
 

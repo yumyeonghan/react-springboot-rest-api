@@ -3,9 +3,9 @@ package com.programmers.library.service.seat;
 import com.programmers.library.domain.seat.Category;
 import com.programmers.library.domain.seat.Seat;
 import com.programmers.library.domain.seat.SeatStatus;
-import com.programmers.library.dto.seat.SeatCreateRequestDto;
-import com.programmers.library.dto.seat.SeatResponseDto;
-import com.programmers.library.dto.seat.SeatUpdateRequestDto;
+import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
+import com.programmers.library.dto.seat.request.SeatUpdateRequestDto;
+import com.programmers.library.dto.seat.response.SeatResponseDto;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import lombok.AllArgsConstructor;
 
