@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {SeatList} from "./components/SeatList";
 import {Summary} from "./components/Summary";
 import axios from "axios";
