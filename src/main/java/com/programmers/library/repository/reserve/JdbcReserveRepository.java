@@ -51,7 +51,7 @@ public class JdbcReserveRepository implements ReserveRepository {
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
                 .addValue("reserveId", UUIDMapper.toBytes(reserve.getReserveId()))
-                .addValue("studentId", reserve.getStudentId())
+                .addValue("studentId", reserve.getStudentId().studentId())
                 .addValue("studentName", reserve.getStudentName())
                 .addValue("seatId", Optional.ofNullable(reserve.getSeat()).map(Seat::getSeatId).orElse(null))
                 .addValue("reserveStatus", reserve.getReserveStatus().name())
@@ -65,10 +65,11 @@ public class JdbcReserveRepository implements ReserveRepository {
     public Reserve update(Reserve reserve) {
         String sql = new UpdateSqlBuilder()
                 .update("reserves")
-                .set("seat_id = :seatId, reserve_status = :reserveStatus, update_at = :updatedAt")
+                .set("seat_id = :seatId, reserve_status = :reserveStatus, updated_at = :updatedAt")
                 .where("reserve_id = :reserveId")
                 .build();
         SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("reserveId", reserve.getReserveId())
                 .addValue("seatId", Optional.ofNullable(reserve.getSeat()).map(Seat::getSeatId).orElse(null))
                 .addValue("reserveStatus", reserve.getReserveStatus().name())
                 .addValue("updatedAt", reserve.getUpdatedAt());
@@ -94,7 +95,7 @@ public class JdbcReserveRepository implements ReserveRepository {
     }
 
     @Override
-    public void deleteById(Long reserveId) {
+    public void deleteById(UUID reserveId) {
         String sql = new DeleteSqlBuilder()
                 .deleteFrom("reserves")
                 .where("reserve_id = :reserveId")

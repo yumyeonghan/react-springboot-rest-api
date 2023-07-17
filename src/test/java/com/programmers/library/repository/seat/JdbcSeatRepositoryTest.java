@@ -65,10 +65,9 @@ class JdbcSeatRepositoryTest {
         jdbcSeatRepository.insert(seat);
         LocalDateTime prevUpdatedAt = seat.getUpdatedAt();
 
+        //when
         seat.changeCategory(Category.OPEN);
         seat.changeSeatStatus(SeatStatus.RESERVATION_NOT_POSSIBLE);
-
-        //when
         Seat updatedSeat = jdbcSeatRepository.update(seat);
 
         //then

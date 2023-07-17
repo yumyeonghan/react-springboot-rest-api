@@ -15,5 +15,5 @@ public interface ReserveRepository {
 
     Optional<Reserve> findById(UUID reserveId);
 
-    void deleteById(Long reserveId);
+    void deleteById(UUID reserveId);
 }
