@@ -67,7 +67,7 @@ class JdbcSeatRepositoryTest {
 
         //when
         seat.changeCategory(Category.OPEN);
-        seat.changeSeatStatus(SeatStatus.RESERVATION_NOT_POSSIBLE);
+        seat.changeSeatStatus();
         Seat updatedSeat = jdbcSeatRepository.update(seat);
 
         //then

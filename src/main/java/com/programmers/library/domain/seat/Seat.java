@@ -59,8 +59,11 @@ public class Seat {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void changeSeatStatus(SeatStatus seatStatus) {
-        this.seatStatus = seatStatus;
+    public void changeSeatStatus() {
+        switch (this.seatStatus) {
+            case RESERVATION_POSSIBLE -> this.seatStatus = SeatStatus.RESERVATION_NOT_POSSIBLE;
+            case RESERVATION_NOT_POSSIBLE -> this.seatStatus = SeatStatus.RESERVATION_POSSIBLE;
+        }
         this.updatedAt = LocalDateTime.now();
     }
 
