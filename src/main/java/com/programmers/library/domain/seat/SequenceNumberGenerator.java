@@ -8,4 +8,8 @@ public class SequenceNumberGenerator {
     protected static Long getNumber() {
         return ++number;
     }
+
+    public static void initNumber() {
+        number = 0;
+    }
 }
