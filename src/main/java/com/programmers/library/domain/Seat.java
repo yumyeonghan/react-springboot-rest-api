@@ -12,7 +12,7 @@ public class Seat {
     private LocalDateTime updatedAt;
 
     public Seat(LocalDateTime createdAt, Category category, SeatStatus seatStatus, LocalDateTime updatedAt) {
-        this.seatId = Count.getNumber();
+        this.seatId = SequenceNumberGenerator.getNumber();
         this.createdAt = createdAt;
         this.category = category;
         this.seatStatus = seatStatus;
