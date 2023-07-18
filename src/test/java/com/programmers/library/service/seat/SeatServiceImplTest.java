@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -87,11 +88,12 @@ class SeatServiceImplTest {
     @Test
     void throwExceptionWhenSeatToUpdateSeatStatusIsNull() {
         //given
-        Long notExistSeatId = 1l;
+        Long seatId = new Random().nextLong();
+
         //when, then
-        assertThatThrownBy(() -> seatService.updateSeatStatus(notExistSeatId))
+        assertThatThrownBy(() -> seatService.updateSeatStatus(seatId))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", notExistSeatId));
+                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", seatId));
     }
 
     @DisplayName("좌석 종류를 수정할 수 있다.")
@@ -114,12 +116,13 @@ class SeatServiceImplTest {
     @Test
     void throwExceptionWhenSeatToUpdateSeatCategoryIsNull() {
         //given
-        Long notExistSeatId = 1l;
-        SeatUpdateRequestDto seatUpdateRequestDto = new SeatUpdateRequestDto(notExistSeatId, CATEGORY_CLOSED);
+        Long seatId = new Random().nextLong();
+        SeatUpdateRequestDto seatUpdateRequestDto = new SeatUpdateRequestDto(seatId, CATEGORY_CLOSED);
+
         //when, then
         assertThatThrownBy(() -> seatService.updateSeatCategory(seatUpdateRequestDto))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", notExistSeatId));
+                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", seatId));
     }
 
     @DisplayName("전체 좌석을 조회할 수 있다.")
@@ -134,8 +137,10 @@ class SeatServiceImplTest {
         SeatCreateRequestDto seatCreateRequestDto2 = new SeatCreateRequestDto(CATEGORY_CLOSED);
         seatService.createSeat(seatCreateRequestDto2);
 
-        //then
+        //when
         List<SeatResponseDto> seatList = seatService.findSeatList();
+
+        //then
         assertThat(seatList).hasSize(expectedSize);
     }
 
@@ -161,6 +166,7 @@ class SeatServiceImplTest {
 
     }
 
+    @DisplayName("식별자로 좌석을 조회할 수 있다.")
     @Test
     void findSeat() {
         //given
@@ -178,10 +184,11 @@ class SeatServiceImplTest {
     @Test
     void throwExceptionWhenSeatToFindIsNull() {
         //given
-        Long notExistSeatId = 1l;
+        Long seatId = new Random().nextLong();
+
         //when, then
-        assertThatThrownBy(() -> seatService.findSeat(notExistSeatId))
+        assertThatThrownBy(() -> seatService.findSeat(seatId))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", notExistSeatId));
+                .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", seatId));
     }
 }
