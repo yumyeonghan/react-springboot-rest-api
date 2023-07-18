@@ -84,10 +84,10 @@ class ReserveTest {
         LocalDateTime prevUpdatedAt = reserve.getUpdatedAt();
 
         //when
-        reserve.changeReserveStatus(ReserveStatus.NOTHING);
+        reserve.changeReserveStatus(ReserveStatus.FAILED);
 
         //then
-        assertThat(reserve.getReserveStatus()).isEqualTo(ReserveStatus.NOTHING);
+        assertThat(reserve.getReserveStatus()).isEqualTo(ReserveStatus.FAILED);
         assertThat(reserve.getUpdatedAt()).isAfter(prevUpdatedAt);
     }
 }

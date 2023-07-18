@@ -84,14 +84,14 @@ class JdbcReserveRepositoryTest {
         LocalDateTime prevUpdatedAt = reserve.getUpdatedAt();
         
         //when
-        reserve.changeReserveStatus(ReserveStatus.NOTHING);
+        reserve.changeReserveStatus(ReserveStatus.FAILED);
         reserve.changeSeat(nextSeat);
         jdbcReserveRepository.update(reserve);
 
         //then
         assertThat(reserve.getUpdatedAt()).isAfter(prevUpdatedAt);
         assertThat(reserve.getSeat()).isEqualTo(nextSeat);
-        assertThat(reserve.getReserveStatus()).isEqualTo(ReserveStatus.NOTHING);
+        assertThat(reserve.getReserveStatus()).isEqualTo(ReserveStatus.FAILED);
     }
 
     @DisplayName("식별자로 예약을 조회할 수 있다.")

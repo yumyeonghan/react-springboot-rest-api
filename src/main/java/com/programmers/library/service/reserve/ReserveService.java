@@ -1,7 +1,7 @@
 package com.programmers.library.service.reserve;
 
 import com.programmers.library.dto.reserve.request.ReserveCreateRequestDto;
-import com.programmers.library.dto.reserve.request.SeatReservationUpdateDto;
+import com.programmers.library.dto.reserve.request.SeatReservationUpdateRequestDto;
 import com.programmers.library.dto.reserve.response.ReserveResponseDto;
 
 import java.util.List;
@@ -12,9 +12,9 @@ public interface ReserveService {
 
     void deleteReserve(UUID reserveId);
 
-    ReserveResponseDto updateReserveStatus(UUID reserveId);
+    ReserveResponseDto updateFailedReserveStatus(UUID reserveId);
 
-    ReserveResponseDto updateSeat(SeatReservationUpdateDto seatReservationUpdateDto);
+    ReserveResponseDto updateSeat(SeatReservationUpdateRequestDto seatReservationUpdateRequestDto);
 
     List<ReserveResponseDto> findReserveList();
 
