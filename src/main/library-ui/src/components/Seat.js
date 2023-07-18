@@ -14,6 +14,7 @@ export function Seat(props) {
         <div className="col-2">
             <img className="img-fluid" src={chair} alt=""/>
         </div>
+        <div className="col text-center price">{seatId}번</div>
         <div className="col text-center price">{category}</div>
         <div className="col text-center price">{seatStatus}</div>
         <div className="col text-center price">

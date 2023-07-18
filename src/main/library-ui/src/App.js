@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SeatList} from "./components/SeatList";
 import {Summary} from "./components/Summary";
 import axios from "axios";
@@ -18,10 +18,10 @@ function App() {
         setSeatReservations(updatedSeatReservations);
     };
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/api/v1/seats')
-    //         .then(v => setSeats(v.data));
-    // }, []);
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/v1/seats')
+            .then(v => setSeats(v.data));
+    }, []);
 
     const handleOrderSubmit = (reserve) => {
         if (seatReservations.length === 0) {

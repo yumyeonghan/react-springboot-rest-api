@@ -1,4 +1,4 @@
-package com.programmers.library.controller.seat;
+package com.programmers.library.controller.web.seat;
 
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;

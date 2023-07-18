@@ -1,5 +1,6 @@
 package com.programmers.library.controller.seat;
 
+import com.programmers.library.controller.web.seat.SeatController;
 import com.programmers.library.domain.seat.Category;
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
