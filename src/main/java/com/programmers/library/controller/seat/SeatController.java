@@ -29,7 +29,7 @@ public class SeatController {
         return "new_seat";
     }
 
-    @PostMapping("/seats")
+    @PostMapping("/new-seat")
     public String newSeat(SeatCreateRequestDto seatCreateRequestDto) {
         seatService.createSeat(seatCreateRequestDto);
         return "redirect:/seats";
