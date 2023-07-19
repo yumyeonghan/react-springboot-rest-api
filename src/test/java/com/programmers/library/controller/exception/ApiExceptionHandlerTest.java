@@ -51,7 +51,7 @@ class ApiExceptionHandlerTest {
         ErrorResult errorResult = apiExceptionHandler.handleRuntimeException(exception);
 
         //then
-        assertThat(errorResult.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(errorResult.httpStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(errorResult.errorMessage()).isEqualTo(errorMessage);
     }
 }
