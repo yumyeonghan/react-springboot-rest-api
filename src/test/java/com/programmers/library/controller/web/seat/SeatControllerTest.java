@@ -1,6 +1,8 @@
 package com.programmers.library.controller.web.seat;
 
 import com.programmers.library.domain.seat.Category;
+import com.programmers.library.domain.seat.Seat;
+import com.programmers.library.domain.seat.SeatStatus;
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
 import com.programmers.library.service.seat.SeatService;
@@ -9,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +69,11 @@ class SeatControllerTest {
     void newSeat() throws Exception {
         //given
         SeatCreateRequestDto seatCreateRequestDto = new SeatCreateRequestDto(Category.OPEN.getDescription());
+        SeatResponseDto seatResponseDto = SeatResponseDto.from(new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now()));
+        when(seatService.createSeat(seatCreateRequestDto)).thenReturn(seatResponseDto);
 
         //when
-        mockMvc.perform(post("/new-seat").flashAttr("seatCreateRequestDto", seatCreateRequestDto))
+        mockMvc.perform(post("/new-seat").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("category", seatCreateRequestDto.category()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/seats"))
                 .andDo(print());
