@@ -35,10 +35,10 @@ function App() {
                     studentId: reserve.studentId, studentName: reserve.studentName, seatId: selectedSeatId,
                 })
                 .then(() => {
-                    alert("정상적으로 예약되었습니다.");
-                }, (error) => {
-                    alert("서버 장애");
-                    console.error(error);
+                    alert("좌석 예약이 되었습니다.");
+                })
+                .catch((error) => {
+                    alert(error.response.data.errorMessage);
                 });
         }
     };
