@@ -16,7 +16,7 @@ public class SeatApiController {
 
     private final SeatService seatService;
 
-    @GetMapping("v1/seats")
+    @GetMapping("/v1/seats")
     public List<SeatResponseDto> seatList() {
         return seatService.findSeatList();
     }
