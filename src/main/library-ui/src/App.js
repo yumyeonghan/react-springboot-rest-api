@@ -19,7 +19,7 @@ function App() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/seats')
+        axios.get('/api/v1/seats')
             .then(v => setSeats(v.data));
     }, []);
 
@@ -29,13 +29,12 @@ function App() {
         } else if (seatReservations.length > 1) {
             alert("좌석을 하나만 선택해 주세요!")
         } else {
+            const selectedSeatId = seatReservations[0].seatId;
             axios
-                .post('http://localhost:8080/api/v1/reserves', {
-                    studentId: reserve.studentId, studentName: reserve.studentName, seat: seats.map((v) => ({
-                        seatId: v.seatId, category: v.category, seatStatus: v.seatStatus,
-                    })),
+                .post('/api/v1/reserves', {
+                    studentId: reserve.studentId, studentName: reserve.studentName, seatId: selectedSeatId,
                 })
-                .then((response) => {
+                .then(() => {
                     alert("정상적으로 예약되었습니다.");
                 }, (error) => {
                     alert("서버 장애");
