@@ -67,6 +67,46 @@ class ReserveServiceImplTest {
                 .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", seatId));
     }
 
+    @DisplayName("학생이 여러번 예약하면 예외가 발생한다.")
+    @Test
+    void throwExceptionWhenStudentReservesMultipleTimes() {
+        //given
+        SeatCreateRequestDto seatCreateRequestDto1 = new SeatCreateRequestDto(Category.OPEN.getDescription());
+        SeatResponseDto seat1 = seatService.createSeat(seatCreateRequestDto1);
+
+        SeatCreateRequestDto seatCreateRequestDto2 = new SeatCreateRequestDto(Category.OPEN.getDescription());
+        SeatResponseDto seat2 = seatService.createSeat(seatCreateRequestDto2);
+
+        String studentId = "201811612";
+        ReserveCreateRequestDto reserveCreateRequestDto1 = new ReserveCreateRequestDto(studentId, "홍길동", seat1.seatId());
+        ReserveCreateRequestDto reserveCreateRequestDto2 = new ReserveCreateRequestDto(studentId, "홍길동", seat2.seatId());
+
+        reserveService.createReserve(reserveCreateRequestDto1);
+
+        //when, then
+        assertThatThrownBy(() -> reserveService.createReserve(reserveCreateRequestDto2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(String.format("%s 학생은 이미 예약이 되어있습니다.", studentId));
+    }
+
+    @DisplayName("같은 좌석을 여러번 예약하면 예외가 발생한다.")
+    @Test
+    void throwExceptionWhenSeatIsReservedMultipleTimes() {
+        //given
+        SeatCreateRequestDto seatCreateRequestDto = new SeatCreateRequestDto(Category.OPEN.getDescription());
+        SeatResponseDto seat = seatService.createSeat(seatCreateRequestDto);
+        Long seatId = seat.seatId();
+        ReserveCreateRequestDto reserveCreateRequestDto1 = new ReserveCreateRequestDto("201811612", "홍길동", seatId);
+        ReserveCreateRequestDto reserveCreateRequestDto2 = new ReserveCreateRequestDto("201811611", "홍길동", seatId);
+
+        reserveService.createReserve(reserveCreateRequestDto1);
+
+        //when, then
+        assertThatThrownBy(() -> reserveService.createReserve(reserveCreateRequestDto2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(String.format("%s 좌석은 이미 예약이 되어있습니다.", seatId));
+    }
+
     @DisplayName("예약을 삭제할 수 있다.")
     @Test
     void deleteReserve() {
@@ -187,7 +227,7 @@ class ReserveServiceImplTest {
         SeatCreateRequestDto seatCreateRequestDto2 = new SeatCreateRequestDto(Category.OPEN.getDescription());
         SeatResponseDto seat2 = seatService.createSeat(seatCreateRequestDto2);
 
-        ReserveCreateRequestDto reserveCreateRequestDto2 = new ReserveCreateRequestDto("201811612", "홍길동", seat2.seatId());
+        ReserveCreateRequestDto reserveCreateRequestDto2 = new ReserveCreateRequestDto("201811611", "홍길동", seat2.seatId());
         reserveService.createReserve(reserveCreateRequestDto2);
 
         //then

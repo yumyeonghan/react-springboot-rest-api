@@ -112,6 +112,23 @@ public class JdbcReserveRepository implements ReserveRepository {
     }
 
     @Override
+    public Optional<Reserve> findBySeatId(Long seatId) {
+        String sql = new SelectSqlBuilder()
+                .select("*")
+                .from("reserves")
+                .where("seat_id = :seatId")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("seatId", seatId);
+        try {
+            Reserve reserve = namedParameterJdbcTemplate.queryForObject(sql, paramMap, getReserveRowMapper());
+            return Optional.of(reserve);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public void deleteById(UUID reserveId) {
         String sql = new DeleteSqlBuilder()
                 .deleteFrom("reserves")

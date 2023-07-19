@@ -26,13 +26,27 @@ public class ReserveServiceImpl implements ReserveService{
     @Override
     public ReserveResponseDto createReserve(ReserveCreateRequestDto reserveCreateRequestDto) {
         String studentId = reserveCreateRequestDto.studentId();
+        validateDuplicateStudent(studentId);
         String studentName = reserveCreateRequestDto.studentName();
         Long seatId = reserveCreateRequestDto.seatId();
+        validateDuplicateSeat(seatId);
         Seat seat = jdbcSeatRepository.findById(seatId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
         Reserve reserve = new Reserve(UUID.randomUUID(), new StudentId(studentId), studentName, seat, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
         jdbcReserveRepository.insert(reserve);
         return ReserveResponseDto.from(reserve);
+    }
+
+    private void validateDuplicateSeat(Long seatId) {
+        if (jdbcReserveRepository.findBySeatId(seatId).isPresent()) {
+            throw new IllegalArgumentException(String.format("%s 좌석은 이미 예약이 되어있습니다.", seatId));
+        }
+    }
+
+    private void validateDuplicateStudent(String studentId) {
+        if (jdbcReserveRepository.findByStudentId(studentId).isPresent()) {
+            throw new IllegalArgumentException(String.format("%s 학생은 이미 예약이 되어있습니다.", studentId));
+        }
     }
 
     @Override
