@@ -95,6 +95,23 @@ public class JdbcReserveRepository implements ReserveRepository {
     }
 
     @Override
+    public Optional<Reserve> findByStudentId(String studentId) {
+        String sql = new SelectSqlBuilder()
+                .select("*")
+                .from("reserves")
+                .where("student_id = :studentId")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("studentId", studentId);
+        try {
+            Reserve reserve = namedParameterJdbcTemplate.queryForObject(sql, paramMap, getReserveRowMapper());
+            return Optional.of(reserve);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public void deleteById(UUID reserveId) {
         String sql = new DeleteSqlBuilder()
                 .deleteFrom("reserves")

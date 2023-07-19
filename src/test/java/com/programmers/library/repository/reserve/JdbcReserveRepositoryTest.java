@@ -112,6 +112,25 @@ class JdbcReserveRepositoryTest {
         assertThat(foundReserve).usingRecursiveComparison().isEqualTo(reserve);
     }
 
+    @DisplayName("학번으로 예약을 조회할 수 있다.")
+    @Test
+    void findByStudentId() {
+        //given
+        Seat seat = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat);
+
+        UUID reserveId = UUID.randomUUID();
+        StudentId studentId = new StudentId("201811612");
+        Reserve reserve = new Reserve(reserveId, studentId, "홍길동", seat, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
+        jdbcReserveRepository.insert(reserve);
+
+        //when
+        Reserve foundReserve = jdbcReserveRepository.findByStudentId(studentId.studentId()).get();
+
+        //then
+        assertThat(foundReserve).usingRecursiveComparison().isEqualTo(reserve);
+    }
+
     @DisplayName("식별자로 예약을 삭제할 수 있다.")
     @Test
     void deleteById() {

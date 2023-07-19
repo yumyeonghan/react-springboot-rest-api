@@ -15,5 +15,7 @@ public interface ReserveRepository {
 
     Optional<Reserve> findById(UUID reserveId);
 
+    Optional<Reserve> findByStudentId(String studentId);
+
     void deleteById(UUID reserveId);
 }
