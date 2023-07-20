@@ -125,4 +125,30 @@ class JdbcSeatRepositoryTest {
         assertThat(seatList).hasSize(expectedSize);
         assertThat(seatList.stream().allMatch(seat -> seat.getCategory() == category)).isTrue();
     }
+
+    @DisplayName("페이지 별로 좌석을 조회할 수 있다.")
+    @Test
+    void findAllByPage() {
+        //given
+        final int pageSize = 2;
+        final int pageNumber = 2;
+        final int offset = (pageNumber - 1) * pageSize;
+
+        Seat seat1 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat1);
+
+        Seat seat2 = new Seat(LocalDateTime.now(), Category.OPEN, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat2);
+
+        Seat seat3 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat3);
+
+        //when
+        List<Seat> seatList = jdbcSeatRepository.findAllByPage(offset, pageSize);
+
+        //then
+        final int expectedSize = 1;
+        assertThat(seatList).hasSize(expectedSize);
+        assertThat(seatList.get(0)).usingRecursiveComparison().isEqualTo(seat3);
+    }
 }
