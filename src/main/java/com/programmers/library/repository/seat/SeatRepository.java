@@ -20,6 +20,4 @@ public interface SeatRepository {
     List<Seat> findAllByCategory(Category category);
 
     List<Seat> findAllByPage(int offset, int pageSize);
-
-     int getCount();
 }

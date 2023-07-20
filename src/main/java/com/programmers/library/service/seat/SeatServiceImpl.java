@@ -79,7 +79,7 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public PageSeatResponseDto findSeatListByPage(int pageNumber, int pageSize) {
         int offset = (pageNumber - 1) * pageSize;
-        int totalSeatCount = jdbcSeatRepository.getCount();
+        int totalSeatCount = jdbcSeatRepository.findAll().size();
         int totalPages = (int) Math.ceil((double) totalSeatCount / pageSize);
         List<SeatResponseDto> seats = jdbcSeatRepository.findAllByPage(offset, pageSize).stream().map(SeatResponseDto::from).toList();
         return PageSeatResponseDto.from(seats, totalPages);

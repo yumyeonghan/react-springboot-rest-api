@@ -120,15 +120,6 @@ public class JdbcSeatRepository implements SeatRepository {
         return namedParameterJdbcTemplate.query(sql, getSeatRowMapper());
     }
 
-    @Override
-    public int getCount() {
-        String sql = new SelectSqlBuilder()
-                .select("COUNT(*)")
-                .from("seats")
-                .build();
-        return namedParameterJdbcTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
-    }
-
     private RowMapper<Seat> getSeatRowMapper() {
         return (rs, rowNum) -> {
             Long seatId = rs.getLong("seat_id");
