@@ -18,10 +18,26 @@ function App() {
         setSeatReservations(updatedSeatReservations);
     };
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const pageSize = 3;
+
+    const fetchPageData = (pageNumber) => {
+        axios.get(`/api/v1/page-seats?page=${pageNumber}&size=${pageSize}`)
+            .then(response => {
+                const { seats, totalPages } = response.data;
+                setSeats(seats);
+                setTotalPages(totalPages);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
     useEffect(() => {
-        axios.get('/api/v1/seats')
-            .then(v => setSeats(v.data));
-    }, []);
+        fetchPageData(page);
+    }, [page]);
+
 
     const handleOrderSubmit = (reserve) => {
         if (seatReservations.length === 0) {
@@ -43,6 +59,14 @@ function App() {
         }
     };
 
+    const handlePrevPage = () => {
+        setPage(prevPage => Math.max(prevPage - 1, 1));
+    };
+
+    const handleNextPage = () => {
+        setPage(prevPage => Math.min(prevPage + 1, totalPages));
+    };
+
     return (<div className="container-fluid">
         <div className="row justify-content-center m-4">
             <h1 className="text-center">Seat Reservation</h1>
@@ -51,6 +75,10 @@ function App() {
             <div className="row">
                 <div className="col-md-8 mt-4 d-flex flex-column align-items-start p-3 pt-0">
                     <SeatList seats={seats} onAddClick={handleAddClicked}/>
+                    <div className="d-flex justify-content-center">
+                        <button className="btn btn-secondary m-2" onClick={handlePrevPage} disabled={page === 1}>이전</button>
+                        <button className="btn btn-secondary m-2" onClick={handleNextPage} disabled={page === totalPages}>다음</button>
+                    </div>
                 </div>
                 <div className="col-md-4 summary p-4">
                     <Summary seatReservation={seatReservations} onReserveSubmit={handleOrderSubmit}/>

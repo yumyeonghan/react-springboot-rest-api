@@ -5,6 +5,7 @@ import com.programmers.library.domain.seat.Seat;
 import com.programmers.library.domain.seat.SeatStatus;
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.request.SeatUpdateRequestDto;
+import com.programmers.library.dto.seat.response.PageSeatResponseDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class SeatServiceImpl implements SeatService{
+public class SeatServiceImpl implements SeatService {
 
     private final JdbcSeatRepository jdbcSeatRepository;
 
@@ -73,5 +74,14 @@ public class SeatServiceImpl implements SeatService{
         return jdbcSeatRepository.findById(seatId)
                 .map(SeatResponseDto::from)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
+    }
+
+    @Override
+    public PageSeatResponseDto findSeatListByPage(int pageNumber, int pageSize) {
+        int offset = (pageNumber - 1) * pageSize;
+        int totalSeatCount = jdbcSeatRepository.getCount();
+        int totalPages = (int) Math.ceil((double) totalSeatCount / pageSize);
+        List<SeatResponseDto> seats = jdbcSeatRepository.findAllByPage(offset, pageSize).stream().map(SeatResponseDto::from).toList();
+        return PageSeatResponseDto.from(seats, totalPages);
     }
 }

@@ -2,6 +2,7 @@ package com.programmers.library.service.seat;
 
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.request.SeatUpdateRequestDto;
+import com.programmers.library.dto.seat.response.PageSeatResponseDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface SeatService {
     List<SeatResponseDto> findSeatListByCategory(String category);
 
     SeatResponseDto findSeat(Long seatId);
+    PageSeatResponseDto findSeatListByPage(int pageNumber, int pageSize);
 }

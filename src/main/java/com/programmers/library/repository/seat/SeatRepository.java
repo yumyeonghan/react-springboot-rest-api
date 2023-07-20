@@ -18,4 +18,8 @@ public interface SeatRepository {
     void deleteById(Long seatId);
 
     List<Seat> findAllByCategory(Category category);
+
+    List<Seat> findAllByPage(int offset, int pageSize);
+
+     int getCount();
 }
