@@ -168,4 +168,31 @@ class JdbcReserveRepositoryTest {
         Optional<Reserve> foundReserve = jdbcReserveRepository.findById(reserveId);
         assertThat(foundReserve).isEmpty();
     }
+
+    @DisplayName("모든 예약을 삭제할 수 있다.")
+    @Test
+    void deleteAll() {
+        //given
+        Seat seat1 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat1);
+
+        UUID reserveId1 = UUID.randomUUID();
+        Reserve reserve1 = new Reserve(reserveId1, new StudentId("201811612"), "홍길동", seat1, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
+        jdbcReserveRepository.insert(reserve1);
+
+        Seat seat2 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat2);
+
+        UUID reserveId2 = UUID.randomUUID();
+        Reserve reserve2 = new Reserve(reserveId2, new StudentId("201811611"), "김길동", seat2, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
+        jdbcReserveRepository.insert(reserve2);
+
+        //when
+        jdbcReserveRepository.deleteAll();
+
+        //then
+        int reserveCount = jdbcReserveRepository.findAll().size();
+        int expectedCount = 0;
+        assertThat(reserveCount).isEqualTo(expectedCount);
+    }
 }
