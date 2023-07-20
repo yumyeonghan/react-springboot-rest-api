@@ -21,5 +21,6 @@ public interface SeatService {
     List<SeatResponseDto> findSeatListByCategory(String category);
 
     SeatResponseDto findSeat(Long seatId);
+
     PageSeatResponseDto findSeatListByPage(int pageNumber, int pageSize);
 }

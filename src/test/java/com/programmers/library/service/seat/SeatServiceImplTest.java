@@ -2,8 +2,10 @@ package com.programmers.library.service.seat;
 
 import com.programmers.library.domain.seat.Category;
 import com.programmers.library.domain.seat.Seat;
+import com.programmers.library.domain.seat.SeatStatus;
 import com.programmers.library.dto.seat.request.SeatCreateRequestDto;
 import com.programmers.library.dto.seat.request.SeatUpdateRequestDto;
+import com.programmers.library.dto.seat.response.PageSeatResponseDto;
 import com.programmers.library.dto.seat.response.SeatResponseDto;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
 import org.assertj.core.api.Condition;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -190,5 +193,31 @@ class SeatServiceImplTest {
         assertThatThrownBy(() -> seatService.findSeat(seatId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(String.format("%s번 좌석이 존재하지 않습니다.", seatId));
+    }
+
+    @DisplayName("페이지별로 좌석과 전체 페이지수를 조회할 수 있다.")
+    void findSeatListByPage() {
+        //given
+        final int pageSize = 2;
+        final int pageNumber = 2;
+
+        Seat seat1 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat1);
+
+        Seat seat2 = new Seat(LocalDateTime.now(), Category.OPEN, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat2);
+
+        Seat seat3 = new Seat(LocalDateTime.now(), Category.CLOSED, SeatStatus.RESERVATION_POSSIBLE, LocalDateTime.now());
+        jdbcSeatRepository.insert(seat3);
+
+        //when
+        PageSeatResponseDto seatListByPage = seatService.findSeatListByPage(pageNumber, pageSize);
+
+        //then
+        final int expectedSize = 1;
+        int totalPages = jdbcSeatRepository.findAll().size();
+
+        assertThat(seatListByPage.seats()).hasSize(expectedSize);
+        assertThat(seatListByPage.totalPages()).isEqualTo(totalPages);
     }
 }

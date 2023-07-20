@@ -126,7 +126,7 @@ class JdbcSeatRepositoryTest {
         assertThat(seatList.stream().allMatch(seat -> seat.getCategory() == category)).isTrue();
     }
 
-    @DisplayName("페이지 별로 좌석을 조회할 수 있다.")
+    @DisplayName("페이지별로 좌석을 조회할 수 있다.")
     @Test
     void findAllByPage() {
         //given
