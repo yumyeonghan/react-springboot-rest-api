@@ -139,6 +139,15 @@ public class JdbcReserveRepository implements ReserveRepository {
         namedParameterJdbcTemplate.update(sql, paramMap);
     }
 
+    @Override
+    public void deleteAll() {
+        String sql = new DeleteSqlBuilder()
+                .deleteFrom("reserves")
+                .build();
+        SqlParameterSource paramMap = new MapSqlParameterSource();
+        namedParameterJdbcTemplate.update(sql, paramMap);
+    }
+
     private RowMapper<Reserve> getReserveRowMapper() {
         return (rs, rowNum) -> {
             UUID reserveId = UUIDMapper.toUUID(rs.getBytes("reserve_id"));

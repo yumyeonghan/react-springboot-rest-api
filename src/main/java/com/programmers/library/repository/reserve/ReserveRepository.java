@@ -20,4 +20,6 @@ public interface ReserveRepository {
     Optional<Reserve> findBySeatId(Long seatId);
 
     void deleteById(UUID reserveId);
+
+    void deleteAll();
 }
