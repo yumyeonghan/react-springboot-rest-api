@@ -19,4 +19,6 @@ public interface ReserveService {
     List<ReserveResponseDto> findReserveList();
 
     ReserveResponseDto findReserve(UUID reserveId);
+
+    void deleteAllReserve();
 }

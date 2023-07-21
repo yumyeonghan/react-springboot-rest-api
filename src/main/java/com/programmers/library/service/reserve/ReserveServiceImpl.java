@@ -34,6 +34,8 @@ public class ReserveServiceImpl implements ReserveService{
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
         Reserve reserve = new Reserve(UUID.randomUUID(), new StudentId(studentId), studentName, seat, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
         jdbcReserveRepository.insert(reserve);
+        seat.changeSeatStatus();
+        jdbcSeatRepository.update(seat);
         return ReserveResponseDto.from(reserve);
     }
 
@@ -51,6 +53,11 @@ public class ReserveServiceImpl implements ReserveService{
 
     @Override
     public void deleteReserve(UUID reserveId) {
+        Reserve reserve = jdbcReserveRepository.findById(reserveId)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("%s 예약이 존재하지 않습니다.", reserveId)));
+        Seat seat = reserve.getSeat();
+        seat.changeSeatStatus();
+        jdbcSeatRepository.update(seat);
         jdbcReserveRepository.deleteById(reserveId);
     }
 
@@ -89,5 +96,15 @@ public class ReserveServiceImpl implements ReserveService{
         Reserve reserve = jdbcReserveRepository.findById(reserveId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s 예약이 존재하지 않습니다.", reserveId)));
         return ReserveResponseDto.from(reserve);
+    }
+
+    @Override
+    public void deleteAllReserve() {
+        List<Seat> seatList = jdbcSeatRepository.findAll();
+        for (Seat seat : seatList) {
+            seat.changeSeatStatus();
+            jdbcSeatRepository.update(seat);
+        }
+        jdbcReserveRepository.deleteAll();
     }
 }
