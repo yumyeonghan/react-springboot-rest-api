@@ -100,8 +100,9 @@ public class ReserveServiceImpl implements ReserveService{
 
     @Override
     public void deleteAllReserve() {
-        List<Seat> seatList = jdbcSeatRepository.findAll();
-        for (Seat seat : seatList) {
+        List<Reserve> reserveList = jdbcReserveRepository.findAll();
+        for (Reserve reserve : reserveList) {
+            Seat seat = reserve.getSeat();
             seatService.updateSeatStatus(seat.getSeatId());
         }
         jdbcReserveRepository.deleteAll();
