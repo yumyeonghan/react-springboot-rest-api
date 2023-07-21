@@ -9,6 +9,7 @@ import com.programmers.library.dto.reserve.request.SeatReservationUpdateRequestD
 import com.programmers.library.dto.reserve.response.ReserveResponseDto;
 import com.programmers.library.repository.reserve.JdbcReserveRepository;
 import com.programmers.library.repository.seat.JdbcSeatRepository;
+import com.programmers.library.service.seat.SeatService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class ReserveServiceImpl implements ReserveService{
 
     private final JdbcReserveRepository jdbcReserveRepository;
     private final JdbcSeatRepository jdbcSeatRepository;
+    private final SeatService seatService;
 
     @Override
     public ReserveResponseDto createReserve(ReserveCreateRequestDto reserveCreateRequestDto) {
@@ -34,8 +36,7 @@ public class ReserveServiceImpl implements ReserveService{
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s번 좌석이 존재하지 않습니다.", seatId)));
         Reserve reserve = new Reserve(UUID.randomUUID(), new StudentId(studentId), studentName, seat, ReserveStatus.COMPLETED, LocalDateTime.now(), LocalDateTime.now());
         jdbcReserveRepository.insert(reserve);
-        seat.changeSeatStatus();
-        jdbcSeatRepository.update(seat);
+        seatService.updateSeatStatus(seatId);
         return ReserveResponseDto.from(reserve);
     }
 
@@ -56,8 +57,7 @@ public class ReserveServiceImpl implements ReserveService{
         Reserve reserve = jdbcReserveRepository.findById(reserveId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("%s 예약이 존재하지 않습니다.", reserveId)));
         Seat seat = reserve.getSeat();
-        seat.changeSeatStatus();
-        jdbcSeatRepository.update(seat);
+        seatService.updateSeatStatus(seat.getSeatId());
         jdbcReserveRepository.deleteById(reserveId);
     }
 
@@ -102,8 +102,7 @@ public class ReserveServiceImpl implements ReserveService{
     public void deleteAllReserve() {
         List<Seat> seatList = jdbcSeatRepository.findAll();
         for (Seat seat : seatList) {
-            seat.changeSeatStatus();
-            jdbcSeatRepository.update(seat);
+            seatService.updateSeatStatus(seat.getSeatId());
         }
         jdbcReserveRepository.deleteAll();
     }
